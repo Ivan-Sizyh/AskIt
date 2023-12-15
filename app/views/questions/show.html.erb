@@ -10,6 +10,10 @@
 
 <hr class="my-3">
 
-<%= render 'answers/new_answer' %>
+<h2>Write your answer</h2>
 
-<%= render 'answers/all_answers' %>
+<%= render 'answers/form' %>
+
+<h2 class="mt-5">Answers</h2>
+
+<%= render @question.answers %>
