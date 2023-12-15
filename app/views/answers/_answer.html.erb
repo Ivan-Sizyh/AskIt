@@ -1,0 +1,13 @@
+<article class="mb-3">
+  <time datetime="<%= answer.formatted_created_at %>">
+    <%= answer.formatted_created_at %>
+  </time>
+
+  <p>
+    <%= answer.body %>
+  </p>
+
+  <%= link_to 'Delete', answer_path(answer), 
+                        data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, 
+                        class: 'btn btn-danger custom-btn-size' %>
+</article>
