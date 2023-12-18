@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ErrorHandling # rubocop:disable Style/Documentation
+module ErrorHandling
   extend ActiveSupport::Concern
 
   included do
@@ -10,7 +10,7 @@ module ErrorHandling # rubocop:disable Style/Documentation
 
     def notfound(exception)
       logger.warn exception
-      render file: '/public/404.html', status: :not_found, layout: false
+      render file: 'public/404.html', status: :not_found, layout: false
     end
   end
 end

@@ -1,19 +1,23 @@
-<h2><%= @question.title %></h2>
+<% provide :page_title, @question.title %>
+<% currently_at t('menu.questions') %>
 
-<time datetime="<%= @question.formatted_created_at %>">
-  <%= @question.formatted_created_at %>
-</time>
+<article class="mb-3">
+  <%= render @question %>
+</article>
 
-<p>
-  <%= @question.body %>
-</p>
+<%= render 'comments/commentable', commentable: @question, comment: @comment %>
 
-<hr class="my-3">
-
-<h2>Write your answer</h2>
+<h2 class="my-3"><%= t '.write_answer' %></h2>
 
 <%= render 'answers/form' %>
 
-<h2 class="mt-5">Answers</h2>
+<h2 class="mt-5 mb-3"><%= t '.answers' %></h2>
 
-<%= render @question.answers %>
+<%= pagination @pagy %>
+
+<%= turbo_frame_tag 'answers' do %>
+  <%= render partial: 'answers/answer', collection: @answers,
+    as: :answer, locals: {question: @question} %>
+<% end %>
+
+<%= pagination @pagy %>

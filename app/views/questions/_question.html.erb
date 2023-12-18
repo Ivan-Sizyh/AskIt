@@ -1,21 +1,32 @@
-<article class="card mt-3">
+<%= turbo_frame_tag question do %>
+  <article class="card my-3">
+    <section class="card-header">
+      <%= question.user.gravatar %>
+      <%= question.user.name_or_email %>
+    </section>
+
     <div class="card-body">
-      <h4><%= question.title %></h2>
+      <h4><%= link_to question.title, question_path(question),
+        data: {turbo_frame: '_top'} %></h2>
 
       <section class="card-text">
-        <time datetime="<%= question.formatted_created_at %>">
+        <%= tag.time datetime: question.formatted_created_at do %>
           <small><%= question.formatted_created_at %></small>
-        </time>
+        <% end %>
 
         <p class="my-2">
-          <%= question.body %>
+          <%= sanitize question.body %>
         </p>
       </section>
 
-      <%= link_to 'Show', question_path(question), class: 'btn btn-primary custom-btn-size' %> 
-      <%= link_to 'Edit', edit_question_path(question), class: 'btn btn-secondary custom-btn-size' %>
-      <%= link_to 'Delete', question_path(question), 
-                            data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, 
-                            class: 'btn btn-danger custom-btn-size' %>
+      <% if policy(question).edit? %>
+        <%= link_to t('global.button.edit'), edit_question_path(question), class: 'btn btn-secondary' %>
+      <% end %>
+
+      <% if policy(question).destroy? %>
+        <%= link_to t('global.button.delete'), question_path(question), class: 'btn btn-danger',
+          data: {turbo_method: :delete, turbo_confirm: t('global.dialog.you_sure')} %>
+      <% end %>
     </div>
   </article>
+<% end %>

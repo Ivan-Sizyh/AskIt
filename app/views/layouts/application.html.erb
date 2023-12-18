@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
-    <title>AskIt</title>
+    <meta charset="utf-8">
+    <title><%= full_title(yield(:page_title)) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag "application" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload", media: 'all' %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body>
-    <%= render "shared/header" %>
-
+  <body data-lang="<%= I18n.locale %>">
+    <%= yield :main_menu %>
+    
     <main class="container mt-3">
-      <%= render "shared/flashes" %>
+      <div id="flash">
+        <%= render 'shared/flash' %>
+      </div>
 
       <%= yield %>
     </main>

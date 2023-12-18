@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ApplicationMailer < ActionMailer::Base # rubocop:disable Style/Documentation
-  default from: 'from@example.com'
+class ApplicationMailer < ActionMailer::Base
+  default from: 'admin@askit.com'
   layout 'mailer'
 end

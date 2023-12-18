@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Answer < ApplicationRecord # rubocop:disable Style/Documentation
+class Answer < ApplicationRecord
+  include Authorship
+  include Commentable
+
   belongs_to :question
+  belongs_to :user
 
-  validates :body, presence: true
-
-  def formatted_created_at
-    created_at.strftime('%Y-%m-%d %H:%M:%S')
-  end
+  validates :body, presence: true, length: { minimum: 5 }
 end

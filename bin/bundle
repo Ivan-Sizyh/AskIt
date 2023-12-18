@@ -21,7 +21,7 @@ m = Module.new do
     ENV['BUNDLER_VERSION']
   end
 
-  def cli_arg_version # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def cli_arg_version
     return unless invoked_as_script? # don't want to hijack other binstubs
     return unless 'update'.start_with?(ARGV.first || ' ') # must be running `bundle update`
 
@@ -29,7 +29,7 @@ m = Module.new do
     update_index = nil
     ARGV.each_with_index do |a, i|
       bundler_version = a if update_index && update_index.succ == i && a =~ Gem::Version::ANCHORED_VERSION_PATTERN
-      next unless a =~ /\A--bundler(?:[= ](#{Gem::Version::VERSION_PATTERN}))?\z/
+      next unless a =~ /\A--bundler(?:[= ](#{Gem::Version::VERSION_PATTERN}))?\z/o
 
       bundler_version = Regexp.last_match(1)
       update_index = i
@@ -39,7 +39,7 @@ m = Module.new do
 
   def gemfile
     gemfile = ENV['BUNDLE_GEMFILE']
-    return gemfile if gemfile && !gemfile.empty?
+    return gemfile if gemfile.present?
 
     File.expand_path('../Gemfile', __dir__)
   end
@@ -47,7 +47,7 @@ m = Module.new do
   def lockfile
     lockfile =
       case File.basename(gemfile)
-      when 'gems.rb' then gemfile.sub(/\.rb$/, '.locked')
+      when 'gems.rb' then gemfile.sub(/\.rb$/, gemfile)
       else "#{gemfile}.lock"
       end
     File.expand_path(lockfile)
@@ -57,24 +57,29 @@ m = Module.new do
     return unless File.file?(lockfile)
 
     lockfile_contents = File.read(lockfile)
-    return unless lockfile_contents =~ /\n\nBUNDLED WITH\n\s{2,}(#{Gem::Version::VERSION_PATTERN})\n/
+    return unless lockfile_contents =~ /\n\nBUNDLED WITH\n\s{2,}(#{Gem::Version::VERSION_PATTERN})\n/o
 
     Regexp.last_match(1)
   end
 
-  def bundler_requirement
-    @bundler_requirement ||=
-      env_var_version ||
-      cli_arg_version ||
-      bundler_requirement_for(lockfile_version)
+  def bundler_version
+    @bundler_version ||=
+      env_var_version || cli_arg_version ||
+      lockfile_version
   end
 
-  def bundler_requirement_for(version)
-    return "#{Gem::Requirement.default}.a" unless version
+  def bundler_requirement
+    return "#{Gem::Requirement.default}.a" unless bundler_version
 
-    bundler_gem_version = Gem::Version.new(version)
+    bundler_gem_version = Gem::Version.new(bundler_version)
 
-    bundler_gem_version.approximate_recommendation
+    requirement = bundler_gem_version.approximate_recommendation
+
+    return requirement unless Gem::Version.new(Gem::VERSION) < Gem::Version.new('2.7.0')
+
+    requirement += '.a' if bundler_gem_version.prerelease?
+
+    requirement
   end
 
   def load_bundler!
@@ -83,7 +88,7 @@ m = Module.new do
     activate_bundler
   end
 
-  def activate_bundler # rubocop:disable Metrics/MethodLength
+  def activate_bundler
     gem_error = activation_error_handling do
       gem 'bundler', bundler_requirement
     end
@@ -96,7 +101,7 @@ m = Module.new do
       return
     end
 
-    warn "Activating bundler (#{bundler_requirement}) failed:\n#{gem_error.message}\n\nTo install the version of bundler this project requires, run `gem install bundler -v '#{bundler_requirement}'`" # rubocop:disable Layout/LineLength
+    warn "Activating bundler (#{bundler_requirement}) failed:\n#{gem_error.message}\n\nTo install the version of bundler this project requires, run `gem install bundler -v '#{bundler_requirement}'`"
     exit 42
   end
 

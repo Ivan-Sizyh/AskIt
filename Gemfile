@@ -1,64 +1,70 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.4'
+ruby '3.1.1'
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.0.8'
-
-# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-gem 'propshaft'
-
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem 'rails', '7.0.2.2'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 1.4'
-
-# Use the Puma web server [https://github.com/puma/puma]
+# Use Puma as the app server
 gem 'puma', '~> 5.0'
 
-# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
-gem 'jsbundling-rails'
+gem 'cssbundling-rails', '~> 1.0'
+gem 'jsbundling-rails', '~> 1.0'
+gem 'propshaft', '~> 0.6'
+gem 'turbo-rails', '~> 1.0'
 
-# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
-gem 'cssbundling-rails'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+# gem 'jbuilder', '~> 2.7'
+# Use Redis adapter to run Action Cable in production
+gem 'redis', '~> 4.0'
+# Use Active Model has_secure_password
+gem 'bcrypt', '~> 3.1.7'
 
-# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "kredis"
+gem 'activerecord-import', '~> 1.2'
+gem 'blueprinter', '~> 0.25'
+gem 'caxlsx', '~> 3.1'
+gem 'caxlsx_rails', '~> 0.6'
+gem 'dotenv-rails', '~> 2.7'
+gem 'draper', '~> 4.0'
+gem 'i18n-tasks', '~> 0.9.34'
+gem 'lokalise_rails', '~> 4'
+gem 'pagy', '~> 5.0'
+gem 'pundit', '~> 2.1'
+gem 'rails-i18n', '~> 7'
+gem 'rubyXL', '~> 3.4'
+gem 'rubyzip', '~> 2'
+gem 'sidekiq', '~> 6'
 
-# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+# Use Active Storage variant
+# gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', require: false
-
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
-
-gem 'sidekiq'
-
-gem 'redis'
-
-gem 'turbo-rails'
-
-gem 'rubocop', require: false
+gem 'bootsnap', '>= 1.4.4', require: false
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'faker', '~> 2'
+  gem 'pry-rails'
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem 'web-console'
-
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem "rack-mini-profiler"
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem 'web-console', '>= 4.1.0'
+  # Display performance information such as SQL time and flame graphs for each request in your browser.
+  # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
+  # gem 'bullet'
+  gem 'letter_opener'
+  gem 'rack-mini-profiler', '~> 3'
+  gem 'rubocop', '~> 1.18', require: false
+  gem 'rubocop-i18n', '~> 3', require: false
+  gem 'rubocop-performance', '~> 1.11', require: false
+  gem 'rubocop-rails', '~> 2.11', require: false
 end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data' # , platforms: %i[mingw mswin x64_mingw jruby]

@@ -13,7 +13,7 @@ require 'action_mailer/railtie'
 require 'action_mailbox/engine'
 require 'action_text/engine'
 require 'action_view/railtie'
-# require "action_cable/engine"
+require 'action_cable/engine'
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -21,10 +21,12 @@ require 'action_view/railtie'
 Bundler.require(*Rails.groups)
 
 module AskIt
-  class Application < Rails::Application # rubocop:disable Style/Documentation
+  class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    config.i18n.available_locales = %i[en ru]
+    config.i18n.default_locale = :en
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -36,6 +38,6 @@ module AskIt
     # Don't generate system test files.
     config.generators.system_tests = nil
 
-    config.public_file_server.enabled = true
+    config.active_job.queue_adapter = :sidekiq
   end
 end
